@@ -14,7 +14,9 @@ public class ArrayDeque<T> {
         if (size == items.length) {
             resize(items.length * 2);
         }
-        moveBack();
+        for (int i = size; i > 0; i--) {
+            items[i] = items[i - 1];
+        }
         items[0] = item;
         size++;
     }
@@ -43,6 +45,7 @@ public class ArrayDeque<T> {
         for (int i = 0; i < size; i++) {
             System.out.println(items[i] + " ");
         }
+        System.out.println();
     }
 
     //Removes and returns the item at the front of the deque. If no such item exists, returns null
@@ -51,7 +54,10 @@ public class ArrayDeque<T> {
             return null;
         }
         T removeItem = items[0];
-        for (int i = 0; i < size - 2; i++) {
+        if (items.length > 16 && (float) (size - 1) / items.length < 0.25) {
+            resize(items.length / 2);
+        }
+        for (int i = 0; i < size - 1; i++) {
             items[i] = items[i + 1];
         }
         items[size - 1] = null;
@@ -65,6 +71,9 @@ public class ArrayDeque<T> {
             return null;
         }
         T removeItem = items[size-1];
+        if (items.length > 16 && (float) (size - 1) / items.length < 0.25) {
+            resize(items.length / 2);
+        }
         items[size - 1] = null;
         size--;
         return removeItem;
@@ -87,11 +96,5 @@ public class ArrayDeque<T> {
         items = a;
     }
 
-    private void moveBack() {
-        for (int i = size; i > 0; i--) {
-            items[i] = items[i - 1];
-        }
-        items[0] = null;
-    }
 
 }
