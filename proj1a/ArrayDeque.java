@@ -1,15 +1,11 @@
 public class ArrayDeque<T> {
 
     private T[] items;
-    private int head;
-    private int tail;
     private int size;
 
     //Creates an empty array deque
     public ArrayDeque() {
         items = (T[]) new Object[8];
-        head = 0;
-        tail = 1;
         size = 0;
     }
 
@@ -18,9 +14,9 @@ public class ArrayDeque<T> {
         if (size == items.length) {
             resize(items.length * 2);
         }
-        items[head] = item;
+        moveBack();
+        items[0] = item;
         size++;
-        head = minusOne(head);
     }
 
     // Adds an item of type T to the back of the deque
@@ -28,9 +24,8 @@ public class ArrayDeque<T> {
         if (size == items.length) {
             resize(items.length * 2);
         }
-        items[tail] = item;
+        items[size] = item;
         size++;
-        tail = plusOne(tail);
     }
 
     // Returns true if deque is empty, false otherwise
@@ -45,11 +40,9 @@ public class ArrayDeque<T> {
 
     //Prints the items in the deque from first to last, separated by a space
     public void printDeque() {
-        for (int i = plusOne(head); i != tail - 1; i = plusOne(i)) {
+        for (int i = 0; i < size; i++) {
             System.out.println(items[i] + " ");
         }
-        System.out.print(items[tail - 1]);
-        System.out.println();
     }
 
     //Removes and returns the item at the front of the deque. If no such item exists, returns null
@@ -57,13 +50,12 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        head = plusOne(head);
-        T removeItem = items[head];
-        items[head] = null;
-        size--;
-        if (items.length >= 16 && size < items.length / 4) {
-            resize(items.length / 2);
+        T removeItem = items[0];
+        for (int i = 0; i < size - 2; i++) {
+            items[i] = items[i + 1];
         }
+        items[size - 1] = null;
+        size--;
         return removeItem;
     }
 
@@ -72,13 +64,9 @@ public class ArrayDeque<T> {
         if (isEmpty()) {
             return null;
         }
-        tail = minusOne(tail);
-        T removeItem = items[tail];
-        items[tail] = null;
+        T removeItem = items[size-1];
+        items[size - 1] = null;
         size--;
-        if (items.length >= 16 && size < items.length / 4) {
-            resize(items.length / 2);
-        }
         return removeItem;
     }
 
@@ -90,23 +78,20 @@ public class ArrayDeque<T> {
         if (index >= size) {
             return null;
         }
-        int begin = plusOne(head);
-        return items[(begin + index) % items.length];
+        return items[index];
     }
 
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 0, a, 0, size);
-        head = 0;
-        tail = size + 1;
         items = a;
     }
 
-    private int plusOne(int x) {
-        return (x + 1) % items.length;
+    private void moveBack() {
+        for (int i = size; i > 0; i--) {
+            items[i] = items[i - 1];
+        }
+        items[0] = null;
     }
 
-    private int minusOne(int x) {
-        return (x - 1 + items.length) % items.length;
-    }
 }
