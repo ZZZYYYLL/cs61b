@@ -45,30 +45,39 @@ public class ArrayDeque<T> {
 
     //Prints the items in the deque from first to last, separated by a space
     public void printDeque() {
-        for (int i = plusOne(head); i != tail; i = plusOne(i)) {
+        for (int i = plusOne(head); i != tail - 1; i = plusOne(i)) {
             System.out.println(items[i] + " ");
         }
+        System.out.print(items[tail - 1]);
         System.out.println();
     }
 
     //Removes and returns the item at the front of the deque. If no such item exists, returns null
     public T removeFirst() {
+        if (isEmpty()) {
+            return null;
+        }
         head = plusOne(head);
         T removeItem = items[head];
         items[head] = null;
-        if (!isEmpty()) {
-            size--;
+        size--;
+        if (items.length >= 16 && size < items.length / 4) {
+            resize(items.length / 2);
         }
         return removeItem;
     }
 
     //Removes and returns the item at the back of the deque. If no such item exists, returns null
     public T removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
         tail = minusOne(tail);
         T removeItem = items[tail];
         items[tail] = null;
-        if (!isEmpty()) {
-            size--;
+        size--;
+        if (items.length >= 16 && size < items.length / 4) {
+            resize(items.length / 2);
         }
         return removeItem;
     }
@@ -88,9 +97,9 @@ public class ArrayDeque<T> {
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
         System.arraycopy(items, 0, a, 0, size);
+        head = 0;
+        tail = size + 1;
         items = a;
-        head = items.length - 1;
-        tail = size;
     }
 
     private int plusOne(int x) {
