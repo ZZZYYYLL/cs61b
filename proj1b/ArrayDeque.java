@@ -1,4 +1,4 @@
-public class ArrayDeque<T> implements Deque<T>{
+public class ArrayDeque<T> implements Deque<T> {
 
     private T[] items;
     private int size;
@@ -77,7 +77,7 @@ public class ArrayDeque<T> implements Deque<T>{
         if (isEmpty()) {
             return null;
         }
-        T removeItem = items[size-1];
+        T removeItem = items[size - 1];
         if (items.length > 16 && (float) (size - 1) / items.length < 0.25) {
             resize(items.length / 2);
         }
