@@ -9,7 +9,7 @@ public class Palindrome {
         return wordInDeque;
     }
 
-    public boolean isPalindrome(Deque<Character> wordInDeque) {
+    private boolean isPalindrome(Deque<Character> wordInDeque) {
         while (wordInDeque.size() > 1) {
             return wordInDeque.removeFirst() == wordInDeque.removeLast() && isPalindrome(wordInDeque);
         }
@@ -20,7 +20,7 @@ public class Palindrome {
         return isPalindrome(wordToDeque(word));
     }
 
-    public boolean isPalindrome(Deque<Character> wordInDeque, CharacterComparator cc) {
+    private boolean isPalindrome(Deque<Character> wordInDeque, CharacterComparator cc) {
         if (wordInDeque.size() > 1) {
             return cc.equalChars(wordInDeque.removeFirst(), wordInDeque.removeLast()) && isPalindrome(wordInDeque, cc);
         }
